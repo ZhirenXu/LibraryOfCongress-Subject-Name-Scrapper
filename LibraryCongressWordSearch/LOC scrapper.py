@@ -15,7 +15,8 @@ def main():
     inputCSV = SimpleCSV.getCSVInput()
     outputCSV = SimpleCSV.getCSVOutput()
     keyword = SimpleCSV.readCSV(inputCSV)
-    isSearchName = keyword.pop(0)
+    keyword.pop(0)
+    isSearchName = Run.askSearchMode()
     #run process (precise->fuzzy->output), return a list contain lists of each row
     result = Run.processSerial(keyword, isSearchName)
     #write into output csv
