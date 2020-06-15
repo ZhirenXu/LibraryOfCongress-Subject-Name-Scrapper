@@ -15,7 +15,8 @@ def readCSV(csvIn):
         for row in csvReader:
             dataList.append(row[0])
         # del the header name read in first line and check which mode do we search
-        if ("subject" in dataList.pop(0)):
+        mode = dataList.pop(0)
+        if ("subject" in mode or "Subject" in mode):
             dataList.insert(0, False)
         else:
             dataList.insert(0, True)
@@ -46,6 +47,14 @@ def writeCSV(dataList, outputFile):
 def getCSVInput():
     print("Please enter csv file name with .csv. \nThe file must in the same folder with your main.py program: ")
     fileIn = input()
+    #add typo protection
+    while ".csv" not in fileIn:
+        print("No .csv detected in fileName. Do you want to type the name again?")
+        print("If you want to exit please press enter.")
+        print("File Name: ", end = '')
+        fileIn = input()
+        if len(fileIn) == 0:
+            sys.exit()
 
     return fileIn
 
@@ -55,6 +64,13 @@ def getCSVInput():
 def getCSVOutput():
     print("Please enter output file name (with .csv): ")
     fileOut = input()
- 
+    while ".csv" not in fileOut:
+        print("No .csv detected in fileName. Do you want to type the name again?")
+        print("If you want to exit please press enter.")
+        print("File Name: ", end = '')
+        fileOut = input()
+        if len(fileOut) == 0:
+            sys.exit()
+
     return fileOut
     
