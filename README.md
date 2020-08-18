@@ -1,5 +1,5 @@
 # LibraryOfCongress-Subject-Name-Scrapper
-A script that can scrapes terms from LOC for library use.
+A script that can scrapes terms from LOC for library use. User can search LCNAF and LCSH in both precise search (url match) or fuzzy search (choose return results from LOC search page)
 
 Base on  https://github.com/ruthtillman/subjectreconscripts
 
