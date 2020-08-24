@@ -3,6 +3,7 @@ import concurrent.futures
 from bs4 import BeautifulSoup
 from functions import PreciseSearch
 from functions import FuzzySearch
+import sys
 
 def loadUrl(url):
     html = urllib.request.urlopen(url)
@@ -60,31 +61,73 @@ def processSerial(*argv):
     if argv[1] == True:
         print("\nSearch name terms in precise mode...")
         #preciseResult is a list contain list!
-        preciseResult = PreciseSearch.preciseNameSearch(argv[0])
+        try:
+            preciseResult = PreciseSearch.preciseNameSearch(argv[0])
+        except:
+            print("\n Failure happen when try to search one of the keyword.")
+            print("Please check your network. If this keep hapeening please send author a message.")
+            print("Hit enter to exit.", end = "")
+            input()
+            sys.exit()
         failedResult = checkFailure(preciseResult, argv[0], printOption)
         if len(failedResult) == len(argv[0]):
             print("\nNo name precise result find!")
             #fuzzyResult is a list contain list!
-            fuzzyResult = FuzzySearch.fuzzyNameSearch(argv[0])
+            try:
+                fuzzyResult = FuzzySearch.fuzzyNameSearch(argv[0])
+            except:
+                print("\n Failure happen when try to search one of the keyword in fuzzy mode.")
+                print("If this keep hapeening please send author a message.")
+                print("Hit enter to exit.", end = "")
+                input()
+                sys.exit()
             resultList = fuzzyResult
         elif len(failedResult) == 0:
             resultList = preciseResult
         else:
-            fuzzyResult = FuzzySearch.fuzzyNameSearch(failedResult)
+            try:
+                fuzzyResult = FuzzySearch.fuzzyNameSearch(failedResult)
+            except:
+                print("\n Failure happen when try to search one of the keyword in fuzzy mode.")
+                print("If this keep hapeening please send author a message.")
+                print("Hit enter to exit.", end = "")
+                input()
+                sys.exit()
             resultList = mergeResult(preciseResult, fuzzyResult)
     #subject search mode
     elif argv[1] == False:
         print("\nSearch subject terms in precise mode...")
-        preciseResult = PreciseSearch.preciseSubjectSearch(argv[0])
+        try:
+            preciseResult = PreciseSearch.preciseSubjectSearch(argv[0])
+        except:
+            print("\n Failure happen when try to search one of the keyword.")
+            print("Please check your network. If this keep hapeening please send author a message.")
+            print("Hit enter to exit.", end = "")
+            input()
+            sys.exit()
         failedResult = checkFailure(preciseResult, argv[0])
         if len(failedResult) == len(argv[0]):
             print("\nNo subject precise result find!")
-            fuzzyResult = FuzzySearch.fuzzySubjectSearch(argv[0])
+            try:
+                fuzzyResult = FuzzySearch.fuzzySubjectSearch(argv[0])
+            except:
+                print("\n Failure happen when try to search one of the keyword.")
+                print("Please check your network. If this keep hapeening please send author a message.")
+                print("Hit enter to exit.", end = "")
+                input()
+                sys.exit()
             resultList = fuzzyResult
         elif len(failedResult) == 0:
             resultList = preciseResult
         else:
-            fuzzyResult = FuzzySearch.fuzzySubjectSearch(failedResult)
+            try:
+                fuzzyResult = FuzzySearch.fuzzySubjectSearch(failedResult)
+            except:
+                print("\n Failure happen when try to search one of the keyword.")
+                print("Please check your network. If this keep hapeening please send author a message.")
+                print("Hit enter to exit.", end = "")
+                input()
+                sys.exit()
             resultList = mergeResult(preciseResult, fuzzyResult)
     
     print("\nkeyword search complete!")

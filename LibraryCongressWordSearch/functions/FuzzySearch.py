@@ -40,7 +40,8 @@ def fuzzyNameSearch(*names):
     dataList = []
     containerCluster = []
     nameData = []
-
+    errName = []
+    
     print("\nSearch name terms in fuzzy mode...")
     for name in names[0]:
         processedName = PreciseSearch.URI_escape(name)
@@ -48,7 +49,11 @@ def fuzzyNameSearch(*names):
     #can be optimized using multi-thread
     for url in nameUrlList:
         print("Opening Url: ", url)
-        htmlList.append(urllib.request.urlopen(url))
+        try:
+            htmlList.append(urllib.request.urlopen(url))
+        except:
+            print("Fail to oprn: ", name)
+            errName.append(name)
     for html in htmlList:
         soup = BeautifulSoup(html, 'html.parser', from_encoding = 'utf-8')
         dataList.append(soup.find_all('tbody', attrs={'class': 'tbody-group'}))
@@ -64,6 +69,12 @@ def fuzzyNameSearch(*names):
             nameData.insert(0, [names[0][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].title])
             containerCluster = []
         i = i + 1
+    if(len(errName) > 0):
+        errName.insert("Name")
+        errorOut = open("FuzzyErr.csv", 'w', encoding = 'utf-8', newline = '')
+        SimpleCSV.writeCSV(errName, errorOut)
+        errorOut
+        print("Name that cause error is put into FuzzyErr.csv")
     return nameData
 
 ## Enter keywords in LOC's search page and pull first 10 results back
@@ -83,7 +94,8 @@ def fuzzySubjectSearch(*subjects):
     #termContainer = []
     containerCluster = []
     subjectData = []
-
+    errSubject = []
+    
     print("\nSearch subject terms in fuzzy mode...")
     for subject in subjects[0]:
         processedSubject = PreciseSearch.URI_escape(subject)
@@ -91,7 +103,10 @@ def fuzzySubjectSearch(*subjects):
     #can be optimized using multi-thread
     for url in subjectUrlList:
         print("Opening Url: ", url)
-        htmlList.append(urllib.request.urlopen(url))
+        try:
+            htmlList.append(urllib.request.urlopen(url))
+        except:
+            print("Fail to open: ", subject)
     for html in htmlList:
         soup = BeautifulSoup(html, 'html.parser', from_encoding = 'utf-8')
         dataList.append(soup.find_all('tbody', attrs={'class': 'tbody-group'}))
@@ -107,6 +122,12 @@ def fuzzySubjectSearch(*subjects):
             subjectData.insert(0, [subjects[0][i], containerCluster[userChoice - 1].title, containerCluster[userChoice - 1].LC_URI, containerCluster[userChoice - 1].title])
             containerCluster = []
         i = i + 1
+    if(len(errSubject) > 0):
+        errSubject.insert("Subject")
+        errorOut = open("FuzzyErr.csv", 'w', encoding = 'utf-8', newline = '')
+        SimpleCSV.writeCSV(errSubject, errorOut)
+        errorOut.close()
+        print("Subject that cause error is put into FuzzyErr.csv")
     return subjectData
 
 ## Display terms to let client choose

@@ -18,6 +18,7 @@ def URI_escape(word):
 #           a list contain lists which have name, url and perferred label
 def preciseNameSearch(*names):
     nameData = []
+    errName = []
     # a list contain names that fail to find in preciseSearch
     combinedNameData = []
     counter = 1
@@ -27,7 +28,11 @@ def preciseNameSearch(*names):
       processedName = URI_escape(name)
       print("Processing ", counter, " / ", totalRecordNum, " of records...", end = "")
       nameURL = 'http://id.loc.gov/authorities/names/label/' + processedName
-      nameResponse = requests.head(nameURL)
+      try:
+        nameResponse = requests.head(nameURL)
+      except:
+        print("Fail to request: ", name)
+        errName.append(name)
       if nameResponse.status_code == 302:
           nameData.append(name)
           nameData.append(name)
@@ -40,6 +45,12 @@ def preciseNameSearch(*names):
           nameData.append("null")
       combinedNameData.append(nameData)
       print("Done!")
+      if(len(errName) > 0):
+        errName.insert("Name")
+        errorOut = open("Err.csv", 'w', encoding = 'utf-8', newline = '')
+        SimpleCSV.writeCSV(errName, errorOut)
+        errorOut
+        print("Name that cause error is put into Err.csv")
       counter = counter + 1
       nameData = []
     #add header for output file
@@ -54,6 +65,7 @@ def preciseNameSearch(*names):
 def preciseSubjectSearch(*subjects):
     subjectData = []
     combinedSubjectData = []
+    errSubject = []
     counter = 1
     totalRecordNum = len(subjects[0])
     
@@ -62,7 +74,11 @@ def preciseSubjectSearch(*subjects):
       print("Processing ", counter, " / ", totalRecordNum, " of records...", end = "")
       processedSubject = URI_escape(subject)
       subjectURL = 'http://id.loc.gov/authorities/subjects/label/' + processedSubject
-      subjectResponse = requests.head(subjectURL)
+      try:
+        subjectResponse = requests.head(subjectURL)
+      except:
+        print("Fail to request: ", subject)
+        errSubject.append(subject)
       if subjectResponse.status_code == 302:
           subjectData.append(subject)
           subjectData.append(subject)
@@ -78,6 +94,12 @@ def preciseSubjectSearch(*subjects):
       subjectData=[]
       counter = counter + 1
     #add header for output file
+    if(len(errSubject) > 0):
+        errSubject.insert("Name")
+        errorOut = open("Err.csv", 'w', encoding = 'utf-8', newline = '')
+        SimpleCSV.writeCSV(errSubject, errorOut)
+        errorOut.close()
+        print("Subject that cause error is put into Err.csv")
     combinedSubjectData.insert(0, ["Raw subject", "Correct Subject", "LC_URI", "LC_Label"])
     return combinedSubjectData
 
