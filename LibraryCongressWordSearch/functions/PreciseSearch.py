@@ -85,6 +85,12 @@ def preciseSubjectSearch(*subjects):
           subjectData.append(subjectResponse.headers['X-Uri'])
           subjectData.append(subjectResponse.headers['X-Preflabel'])
       else:
+          if subjectResponse.status_code == 301:
+            print("\nHTTP 301- Request link has been moved permanently....", end = "")
+          elif subjectResponse.status_code == 404:
+            print("\nHTTP 404- Request link page doesn't exist....", end = "")
+          else:
+            print("\n HTTP", subjectResponse.status_code, "- Not a valid response for scraping....", end = "")
           subjectData.append(subject)
           subjectData.append("null")
           subjectData.append("null")

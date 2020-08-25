@@ -154,7 +154,7 @@ def checkFailure(result, *terms):
             failed.append(terms[0][i])
             i = i + 1     
     print("Done!")
-    print("\nFailed: ")
+    print("\nKeyword with no result: ")
     for element in failed:
         print(element)
          

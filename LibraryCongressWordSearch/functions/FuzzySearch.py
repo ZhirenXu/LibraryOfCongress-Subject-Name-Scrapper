@@ -104,9 +104,10 @@ def fuzzySubjectSearch(*subjects):
     for url in subjectUrlList:
         print("Opening Url: ", url)
         try:
-            htmlList.append(urllib.request.urlopen(url))
+            openedUrl = urllib.request.urlopen(url)
         except:
             print("Fail to open: ", subject)
+        htmlList.append(openedUrl)
     for html in htmlList:
         soup = BeautifulSoup(html, 'html.parser', from_encoding = 'utf-8')
         dataList.append(soup.find_all('tbody', attrs={'class': 'tbody-group'}))
